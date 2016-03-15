@@ -37,33 +37,77 @@ algorithm in order to suggest certain people that utilize the app that are simil
 <h3>
 <a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Let us begin by creating a mini Facebook that we will use to demonstrate how a friend recommendation algorithm will work.</h3>
 
-
-
-
-
-
-
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+<code>CREATE DATABASE facebook;</code> <p>(Use lowercase f!)</p>
+<code> USE facebook;</code>
 
 <h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
+<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Now we want to create a table of the members that are going to be utilizing our site</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular 
-HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<code>CREATE TABLE Members ( id INT NOT NULL AUTO_INCREMENT, 
+name VARCHAR(60), 
+city VARCHAR(60), 
+PRIMARY KEY (id)
+);
+</code>
 
 <h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Next we are going to input the people that will be utilizing our application</h3>
 
-<p>You can <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/#mentioning-users-and-teams" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<code>INSERT INTO Members (name, city) values ('andrew terra', 'sacramento');<br>
+INSERT INTO Members (name, city) values ('ross miller', 'los angeles');<br>
+INSERT INTO Members (name, city) values ('henry warren', 'minneapolis');<br>
+INSERT INTO Members (name, city) values ('gabe leyva', 'salem');<br>
+INSERT INTO Members (name, city) values ('tyler jones', 'tyler');<br>
+INSERT INTO Members (name, city) values ('jordan vallee', 'sacramento');<br>
+INSERT INTO Members (name, city) values ('kirk presley', 'memphis');<br>
+INSERT INTO Members (name, city) values ('byington rhea', 'memphis');<br>
+INSERT INTO Members (name, city) values ('mason clark', 'boston');<br>
+</code>
+
 
 <h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+Now we need to create a table that will hold all of the friendships</h3>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+<code>CREATE TABLE Friends (
+user      VARCHAR(60), 
+friend    VARCHAR(60)
+);
+</code>
+
+
+<h3>
+Now we need to input our beginning friendships into said table</h3>
+
+<code>
+  INSERT INTO Friends (user, friend) Values ('andrew terra', 'henry warren'); <br>
+  INSERT INTO Friends (user, friend) Values ('andrew terra', 'ross miller'); <br>
+  INSERT INTO Friends (user, friend) Values ('andrew terra', 'gabe leyva'); <br>
+  INSERT INTO Friends (user, friend) Values ('ross miller', 'tyler jones'); <br>
+  INSERT INTO Friends (user, friend) Values ('ross miller', 'jordan vallee'); <br>
+  INSERT INTO Friends (user, friend) Values ('henry warren', 'jordan vallee'); <br>
+  INSERT INTO Friends (user, friend) Values ('henry warren', 'kirk presley'); <br>
+  INSERT INTO Friends (user, friend) Values ('gabe leyva', 'byington rhea'); <br>
+  INSERT INTO Friends (user, friend) Values ('gabe leyva', 'jordan vallee'); <br>
+  INSERT INTO Friends (user, friend) Values ('tyler jones', 'mason clark'); <br>
+  INSERT INTO Friends (user, friend) Values ('jordan vallee', 'mason clark'); <br>
+  INSERT INTO Friends (user, friend) Values ('kirk presley', 'mason clark'); <br>
+  INSERT INTO Friends (user, friend) Values ('byington rhea', 'mason clark'); <br>
+</code>
+
+<p>Let's make sure that we have the correct information in our tables, below you can see the SELECT * from 
+the tables in the database, when you do these sql queries you should see similar results. </p>
+
+<code>SELECT * FROM Members;
+</code>
+
+<img src="tut_1.png" alt="screenshot # 1" >
+
+
+
 
       <footer class="site-footer">
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+        <span class="site-footer-credits">This tutorial was created by Andrew Terra with the help of Tyler Kirkpatrick, Paul Ott, and Bryce "the absolute madman" Stevenson</span>
       </footer>
 
     </section>
