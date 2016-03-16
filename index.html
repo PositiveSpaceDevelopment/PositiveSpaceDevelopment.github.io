@@ -113,28 +113,28 @@ The initial query will look daunting, but we will go line-by-line to simplify sa
 
 <code>
   SELECT <br>
-  mems.name AS friend1, <br>
-  friends_friends.friend AS friend2, <br>
-  COUNT(*) AS friends_in_common <br>
+  &nbsp&nbsp&nbsp&nbspmems.name AS friend1, <br>
+  &nbsp&nbsp&nbsp&nbspfriends_friends.friend AS friend2, <br>
+  &nbsp&nbsp&nbsp&nbspCOUNT(*) AS friends_in_common <br>
   FROM <br>
-  Members AS mems <br>
+  &nbsp&nbsp&nbsp&nbspMembers AS mems <br>
   INNER JOIN <br>
-  Friends AS friends <br>
-  ON friends.user = mems.name <br>
+  &nbsp&nbsp&nbsp&nbspFriends AS friends <br>
+  &nbsp&nbsp&nbsp&nbspON friends.user = mems.name <br>
   INNER JOIN <br>
-  Friends AS friends_friends <br>
-  ON friends_friends.user = friends.friend <br>
+  &nbsp&nbsp&nbsp&nbspFriends AS friends_friends <br>
+  &nbsp&nbsp&nbsp&nbspON friends_friends.user = friends.friend <br>
   LEFT JOIN <br>
-  Friends AS friends_with_user <br>
-  ON friends_with_user.user = friends_friends.friend <br>
-  AND friends_with_user.friend = mems.name <br>
+  &nbsp&nbsp&nbsp&nbspFriends AS friends_with_user <br>
+  &nbsp&nbsp&nbsp&nbspON friends_with_user.user = friends_friends.friend <br>
+  &nbsp&nbsp&nbsp&nbspAND friends_with_user.friend = mems.name <br>
   WHERE <br>
-  friends_with_user.user IS NULL <br>
+  &nbsp&nbsp&nbsp&nbspfriends_with_user.user IS NULL <br>
   GROUP BY <br>
-  mems.name, <br>
-  friends_friends.friend <br>
+  &nbsp&nbsp&nbsp&nbspmems.name, <br>
+  &nbsp&nbsp&nbsp&nbspfriends_friends.friend <br>
   ORDER BY <br>
-  friends_in_common DESC <br>
+  &nbsp&nbsp&nbsp&nbspfriends_in_common DESC <br>
   ; <br>
 </code>
 
@@ -147,35 +147,35 @@ The initial query will look daunting, but we will go line-by-line to simplify sa
 <code>
   SELECT <br>
 //This SELECT statement is going to be deciding what exactly we want <br>//to output to the screen<br>
-    mems.name AS friend1,<br>
-    friends_friends.friend AS friend2,<br>
-    COUNT(*) AS friends_in_common<br>
+    &nbsp&nbsp&nbsp&nbspmems.name AS friend1,<br>
+    &nbsp&nbsp&nbsp&nbspfriends_friends.friend AS friend2,<br>
+    &nbsp&nbsp&nbsp&nbspCOUNT(*) AS friends_in_common<br>
 FROM<br>
 //this is where we are getting the information from<br>
-    Members        AS mems<br>
+    &nbsp&nbsp&nbsp&nbspMembers        AS mems<br>
 INNER JOIN<br>
 //we want to join the Members table and the Friends table when the //user and the name are equal<br>
-    Friends        AS friends<br>
-    ON friends.user = mems.name<br>
+    &nbsp&nbsp&nbsp&nbspFriends        AS friends<br>
+    &nbsp&nbsp&nbsp&nbspON friends.user = mems.name<br>
 INNER JOIN<br>
 //we also want to do an inner join of these table on a list of friends <br>//of friends, so this gets the list of friends of friends.<br>
-    Friends        AS friends_friends<br>
-    ON friends_friends.user = friends.friend<br>
+    &nbsp&nbsp&nbsp&nbspFriends        AS friends_friends<br>
+    &nbsp&nbsp&nbsp&nbspON friends_friends.user = friends.friend<br>
 LEFT JOIN<br>
 //left join returns all of the matching rows in the left table, with <br>//matching rows in the right table, and is null in the right table <br>//when there is no match. <br>
-    Friends        AS friends_with_user<br>
-    ON  friends_with_user.user    = friends_friends.friend<br>
-    AND friends_with_user.friend = mems.name<br>
+    &nbsp&nbsp&nbsp&nbspFriends        AS friends_with_user<br>
+    &nbsp&nbsp&nbsp&nbspON  friends_with_user.user    = friends_friends.friend<br>
+    &nbsp&nbsp&nbsp&nbspAND friends_with_user.friend = mems.name<br>
 WHERE<br>
 //we want to check to make sure that the person isn't friends with the <br>//user and then it will be added to the count for that particular person<br>
-    friends_with_user.user IS NULL<br>
+    &nbsp&nbsp&nbsp&nbspfriends_with_user.user IS NULL<br>
 GROUP BY<br>
 //this group by is used in conjuction with the count function in order <br>//to group the result set by the mems.name column and the <br>//friends_friends.friend column.
-    mems.name,<br>
-    friends_friends.friend<br>
+    &nbsp&nbsp&nbsp&nbspmems.name,<br>
+    &nbsp&nbsp&nbsp&nbspfriends_friends.friend<br>
 ORDER BY<br>
 //this is just going to order by the amount of friends each person has <br>//in common in a descending order<br>
-    friends_in_common DESC<br>
+    &nbsp&nbsp&nbsp&nbspfriends_in_common DESC<br>
 ;
 </code>
 
@@ -189,37 +189,37 @@ just outputted to the console using SQL, to our webpage. The php script can be f
 //the password to connect to your SQL<br>
 try<br>
 {<br>
-    $dbc = new PDO('mysql:host=localhost;dbname=facebook', 'root', 'password');<br>
+    &nbsp&nbsp&nbsp&nbsp$dbc = new PDO('mysql:host=localhost;dbname=facebook', 'root', 'password');<br>
 }<br>
 catch (PDOException $e)<br>
 {<br>
-    echo $e->getMessage()."<br>";
-    die();<br>
+    &nbsp&nbsp&nbsp&nbspecho $e->getMessage()."<br>";
+    &nbsp&nbsp&nbsp&nbspdie();<br>
 }<br>
 //we are going to take the query and put it into a variable<br>
 $query = 'SELECT<br>
-    mems.name                         AS friend1,<br>
-    friends_friends.friend            AS friend2,<br>
-    COUNT(*)                          AS friends_in_common<br>
+    &nbsp&nbsp&nbsp&nbspmems.name                         AS friend1,<br>
+    &nbsp&nbsp&nbsp&nbspfriends_friends.friend            AS friend2,<br>
+    &nbsp&nbsp&nbsp&nbspCOUNT(*)                          AS friends_in_common<br>
 FROM<br>
-    Members      AS mems<br>
+    &nbsp&nbsp&nbsp&nbspMembers      AS mems<br>
 INNER JOIN<br>
-    Friends      AS friends<br>
-    ON friends.user = mems.name<br>
+    &nbsp&nbsp&nbsp&nbspFriends      AS friends<br>
+    &nbsp&nbsp&nbsp&nbspON friends.user = mems.name<br>
 INNER JOIN<br>
-    Friends      AS friends_friends<br>
-    ON friends_friends.user = friends.friend<br>
+    &nbsp&nbsp&nbsp&nbspFriends      AS friends_friends<br>
+    &nbsp&nbsp&nbsp&nbspON friends_friends.user = friends.friend<br>
 LEFT JOIN<br>
-    Friends      AS friends_with_user<br>
-    ON  friends_with_user.user    = friends_friends.friend<br>
-    AND friends_with_user.friend = mems.name<br>
+    &nbsp&nbsp&nbsp&nbspFriends      AS friends_with_user<br>
+    &nbsp&nbsp&nbsp&nbspON  friends_with_user.user    = friends_friends.friend<br>
+    &nbsp&nbsp&nbsp&nbspAND friends_with_user.friend = mems.name<br>
 WHERE<br>
-    friends_with_user.user IS NULL<br>
+    &nbsp&nbsp&nbsp&nbspfriends_with_user.user IS NULL<br>
 GROUP BY<br>
-    mems.name,<br>
-    friends_friends.friend<br>
+    &nbsp&nbsp&nbsp&nbspmems.name,<br>
+    &nbsp&nbsp&nbsp&nbspfriends_friends.friend<br>
 ORDER BY<br>
-    friends_in_common DESC<br>
+    &nbsp&nbsp&nbsp&nbspfriends_in_common DESC<br>
 ';<br><br>
 
 //now we want to input the information to the page in a nicely //formatted fashion<br>
@@ -233,12 +233,12 @@ cellspacing="5" cellpadding="8"&gt&ltbr&gt <br>
 //this is where we actually put the information into the html table<br>
 foreach( $dbc->query($query) as $row){ <br>
 <br>
-echo '&lttr>&lttd align="left">' . <br>
-$row['friend1'] . '&lt/td>&lttd align="center">' . <br>
-$row['friend2'] . '&lt/td>&lttd align="center">' . <br>
-$row['friends_in_common'] . '&lt/td>&lttd align="center">'; <br>
+&nbsp&nbsp&nbsp&nbspecho '&lttr>&lttd align="left">' . <br>
+&nbsp&nbsp&nbsp&nbsp$row['friend1'] . '&lt/td>&lttd align="center">' . <br>
+&nbsp&nbsp&nbsp&nbsp$row['friend2'] . '&lt/td>&lttd align="center">' . <br>
+&nbsp&nbsp&nbsp&nbsp$row['friends_in_common'] . '&lt/td>&lttd align="center">'; <br>
 <br>
-echo '&lt/tr>'; <br>
+&nbsp&nbsp&nbsp&nbspecho '&lt/tr>'; <br>
 } <br>
 
 echo '&lt/table>'; <br>
@@ -261,7 +261,7 @@ once their we need to open routes.php to define the endpoint that will execute t
 
 <code>
   $app->get('/facebook', function ($request, $response, $args) { <br>
-    return $this->renderer->render($response, 'facebook.php', $args); <br>
+    &nbsp&nbsp&nbsp&nbspreturn $this->renderer->render($response, 'facebook.php', $args); <br>
 });<br>
 </code>
 
