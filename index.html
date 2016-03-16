@@ -53,7 +53,7 @@ PRIMARY KEY (id)
 <h3>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Next we are going to input the people that will be utilizing our application</h3>
 
-<code>INSERT INTO Members (name, city) values ('andrew terra', 'sacramento');<br>
+<code> INSERT INTO Members (name, city) values ('andrew terra', 'sacramento');<br>
 INSERT INTO Members (name, city) values ('ross miller', 'los angeles');<br>
 INSERT INTO Members (name, city) values ('henry warren', 'minneapolis');<br>
 INSERT INTO Members (name, city) values ('gabe leyva', 'salem');<br>
@@ -78,8 +78,7 @@ friend    VARCHAR(60)
 <h3>
 Now we need to input our beginning friendships into said table</h3>
 
-<code>
-  INSERT INTO Friends (user, friend) Values ('andrew terra', 'henry warren'); <br>
+<code>INSERT INTO Friends (user, friend) Values ('andrew terra', 'henry warren'); <br>
   INSERT INTO Friends (user, friend) Values ('andrew terra', 'ross miller'); <br>
   INSERT INTO Friends (user, friend) Values ('andrew terra', 'gabe leyva'); <br>
   INSERT INTO Friends (user, friend) Values ('ross miller', 'tyler jones'); <br>
@@ -98,9 +97,188 @@ Now we need to input our beginning friendships into said table</h3>
 the tables in the database, when you do these sql queries you should see similar results. </p>
 
 <code>SELECT * FROM Members;
+</code> <br>
+
+<img src="tut_1.png" alt="screenshot # 1" > <br>
+
+<code>SELECT * FROM Friends;</code>
+
+<img src = "tut_2.png" alt = "screenshot #2 "> <br>
+
+<h3>Create a query to receive 3 columns</h3>
+
+<p>Now we have finished the basic schema of our “facebook” application, next we need to create a query that will give us 3 columns. 
+Those columns will be friend1, friend2, and the number of friends they have in common. 
+The initial query will look daunting, but we will go line-by-line to simplify said query.</p>
+
+<code>
+  SELECT <br>
+  mems.name AS friend1, <br>
+  friends_friends.friend AS friend2, <br>
+  COUNT(*) AS friends_in_common <br>
+  FROM <br>
+  Members AS mems <br>
+  INNER JOIN <br>
+  Friends AS friends <br>
+  ON friends.user = mems.name <br>
+  INNER JOIN <br>
+  Friends AS friends_friends <br>
+  ON friends_friends.user = friends.friend <br>
+  LEFT JOIN <br>
+  Friends AS friends_with_user <br>
+  ON friends_with_user.user = friends_friends.friend <br>
+  AND friends_with_user.friend = mems.name <br>
+  WHERE <br>
+  friends_with_user.user IS NULL <br>
+  GROUP BY <br>
+  mems.name, <br>
+  friends_friends.friend <br>
+  ORDER BY <br>
+  friends_in_common DESC <br>
+  ; <br>
 </code>
 
-<img src="tut_1.png" alt="screenshot # 1" >
+<p>When you enter this command, you should get the following table: </p> <br>
+
+<img src = "tut_3.png"> <br>
+
+<p>Now, let's go through the query line-by-line to figure out what each part does.</p>
+
+<code>
+  SELECT <br>
+//This SELECT statement is going to be deciding what exactly we want <br>//to output to the screen<br>
+    mems.name AS friend1,<br>
+    friends_friends.friend AS friend2,<br>
+    COUNT(*) AS friends_in_common<br>
+FROM<br>
+//this is where we are getting the information from<br>
+    Members        AS mems<br>
+INNER JOIN<br>
+//we want to join the Members table and the Friends table when the //user and the name are equal<br>
+    Friends        AS friends<br>
+    ON friends.user = mems.name<br>
+INNER JOIN<br>
+//we also want to do an inner join of these table on a list of friends <br>//of friends, so this gets the list of friends of friends.<br>
+    Friends        AS friends_friends<br>
+    ON friends_friends.user = friends.friend<br>
+LEFT JOIN<br>
+//left join returns all of the matching rows in the left table, with <br>//matching rows in the right table, and is null in the right table <br>//when there is no match. <br>
+    Friends        AS friends_with_user<br>
+    ON  friends_with_user.user    = friends_friends.friend<br>
+    AND friends_with_user.friend = mems.name<br>
+WHERE<br>
+//we want to check to make sure that the person isn't friends with the <br>//user and then it will be added to the count for that particular person<br>
+    friends_with_user.user IS NULL<br>
+GROUP BY<br>
+//this group by is used in conjuction with the count function in order <br>//to group the result set by the mems.name column and the <br>//friends_friends.friend column.
+    mems.name,<br>
+    friends_friends.friend<br>
+ORDER BY<br>
+//this is just going to order by the amount of friends each person has <br>//in common in a descending order<br>
+    friends_in_common DESC<br>
+;
+</code>
+
+
+<h3>Now what we are going to do is create a php program that will output what we 
+just outputted to the console using SQL, to our webpage. The php script can be found below.</h3>
+
+<code>
+  <?php <br>
+//first we are going to connect to the database, make sure to replace<br>
+//the password to connect to your SQL<br>
+try<br>
+{<br>
+    $dbc = new PDO('mysql:host=localhost;dbname=facebook', 'root', 'password');<br>
+}<br>
+catch (PDOException $e)<br>
+{<br>
+    echo $e->getMessage()."<br>";
+    die();<br>
+}<br>
+//we are going to take the query and put it into a variable<br>
+$query = 'SELECT<br>
+    mems.name                         AS friend1,<br>
+    friends_friends.friend            AS friend2,<br>
+    COUNT(*)                          AS friends_in_common<br>
+FROM<br>
+    Members      AS mems<br>
+INNER JOIN<br>
+    Friends      AS friends<br>
+    ON friends.user = mems.name<br>
+INNER JOIN<br>
+    Friends      AS friends_friends<br>
+    ON friends_friends.user = friends.friend<br>
+LEFT JOIN<br>
+    Friends      AS friends_with_user<br>
+    ON  friends_with_user.user    = friends_friends.friend<br>
+    AND friends_with_user.friend = mems.name<br>
+WHERE<br>
+    friends_with_user.user IS NULL<br>
+GROUP BY<br>
+    mems.name,<br>
+    friends_friends.friend<br>
+ORDER BY<br>
+    friends_in_common DESC<br>
+';<br><br>
+
+//now we want to input the information to the page in a nicely //formatted fashion<br>
+echo '&lttable align="left"&ltbr&gt <br>
+cellspacing="5" cellpadding="8"&gt&ltbr&gt <br>
+
+&lttr&gt&lttd align="center"&gt&ltb&gtFriend 1&lt/b&gt&lt/td&gt <br>
+&lttd align="center">&ltb>Friend 2&lt/b>&lt/td> <br>
+&lttd align="center">&ltb>Friends in common&lt/b>&lt/td>&lt/tr>'; <br>
+<br>
+//this is where we actually put the information into the html table<br>
+foreach( $dbc->query($query) as $row){ <br>
+<br>
+echo '&lttr>&lttd align="left">' . <br>
+$row['friend1'] . '&lt/td>&lttd align="center">' . <br>
+$row['friend2'] . '&lt/td>&lttd align="center">' . <br>
+$row['friends_in_common'] . '&lt/td>&lttd align="center">'; <br>
+<br>
+echo '&lt/tr>'; <br>
+} <br>
+
+echo '&lt/table>'; <br>
+
+// Close connection to the database <br>
+$dbc = null; <br>
+
+ ?> <br>
+
+</code>
+
+<p>Once you have saved that file we need to put it into the correct location, 
+to find this location go to the folder in which your zero-to-slim.dev folder is, once there,
+you want to save this facebook.php file inside of the templates folder. In summary <b>zero-to-slim.dev --> templates </b></p>
+
+<p>Now we are going to need to locate and enter the src folder inside of your zero-to-slim.dev folder, 
+once their we need to open routes.php to define the endpoint that will execute the php script we just created.</p>
+
+<p>Once we have opened routes.php, we are going to paste the following code at the bottom. </p>
+
+<code>
+  $app->get('/facebook', function ($request, $response, $args) { <br>
+    return $this->renderer->render($response, 'facebook.php', $args); <br>
+});<br>
+</code>
+
+<p>What this is doing is mapping the endpoint /facebook to execute the facebook.php script. </p>
+
+<p>Now go to your favorite internet browser to test if we did this correctly. 
+What you need to type into your URL is the following: http://zero-to-slim.dev/facebook
+If you did this correctly then you should see a webpage that is similar to the one in the screenshot below.</p> <br>
+
+<img src = "tut_4.png" > <br>
+
+<p>Congrats, now you have a working friend finding algorithm. </p>
+
+
+
+
+
 
 
 
