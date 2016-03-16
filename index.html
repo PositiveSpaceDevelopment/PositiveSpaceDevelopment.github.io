@@ -184,9 +184,9 @@ ORDER BY<br>
 just outputted to the console using SQL, to our webpage. The php script can be found below.</h3>
 
 <code>
-  <?php <br>
+  &lt?php <br>
 //first we are going to connect to the database, make sure to replace<br>
-//the password to connect to your SQL<br>
+//the password to connect to your SQL&ltbr&gt
 try<br>
 {<br>
     &nbsp&nbsp&nbsp&nbsp$dbc = new PDO('mysql:host=localhost;dbname=facebook', 'root', 'password');<br>
@@ -241,7 +241,7 @@ foreach( $dbc->query($query) as $row){ <br>
 &nbsp&nbsp&nbsp&nbspecho '&lt/tr>'; <br>
 } <br>
 
-echo '&lt/table>'; <br>
+echo '&lt/table&gt'; <br>
 
 // Close connection to the database <br>
 $dbc = null; <br>
